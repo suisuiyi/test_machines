@@ -1,5 +1,5 @@
 #encoding: utf-8
-from flask import Flask,render_template,request,redirect,url_for
+from flask import Flask,render_template,request,redirect,url_for,session
 import config
 from exts import db
 from models import User
@@ -39,11 +39,27 @@ def login():
     else:
         telephone = request.form.get('telephone')
         password = request.form.get('password')
-        existentUser = User.query.filter(User.telephone == telephone).first()
-        if existentUser:
+        user = User.query.filter(User.telephone == telephone).first()
+        if user:
+            session['user_id'] = user.id
+            session.permanent = True
             return redirect(url_for('index'))
         else:
             return '该用户不存在，请注册后登录'
+@app.route('/logout/')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
+@app.context_processor
+def my_context_processor():
+    user_id = session.get('user_id')
+    user = User.query.filter(User.id == user_id).first()
+    if user:
+        return {'user': user}
+    else:
+        return {}
+
 
 if __name__ == '__main__':
     app.run()

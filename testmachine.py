@@ -3,13 +3,17 @@ from flask import Flask,render_template,request,redirect,url_for,session
 import config
 from exts import db
 from models import User
+from models import Machine
 app = Flask(__name__)
 app.config.from_object(config)
 db.init_app(app)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    context = {
+        'machines': Machine.query.order_by('-create_time').all()
+    }
+    return render_template('index.html', **context)
 
 @app.route('/register/', methods=['GET','POST'])
 def register():
@@ -50,6 +54,40 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('login'))
+
+
+@app.route('/add/machine/', methods=['GET','POST'])
+def add_machine():
+    if request.method == 'GET':
+        user_id = session.get('user_id')
+        current_user = User.query.filter(User.id == user_id).first()
+        if current_user:
+            return render_template('addMachine.html')
+        else:
+            return redirect(url_for('login'))
+    else:
+        name = request.form.get('name')
+        user_id = session.get('user_id')
+        # current_user = User.query.filter(User.id == user_id).first()
+        # username = current_user.username
+        custodian = request.form.get('custodian')
+
+        operating_system = request.form.get('operation_system')
+        operating_system_version = request.form.get('operation_system_version')
+        color = request.form.get('color')
+
+        machine = Machine(status=0, name=name, operating_system=0, operating_system_version=operating_system_version, color=0)
+        db.session.add(machine)
+        db.session.commit()
+        return redirect(url_for('index'))
+
+@app.route('/edit/machine/', methods=['GET','POST'])
+def edit_machine():
+    if request.method == 'GET':
+        return render_template('editMachine.html')
+    else:
+        pass
+
 
 @app.context_processor
 def my_context_processor():

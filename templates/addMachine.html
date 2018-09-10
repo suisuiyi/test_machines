@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block title %}
+    添加测试机
+{% endblock %}
+
+{% block main %}
+    <h3 class="page-title">请添加一个机器</h3>
+    <form class="form-horizontal" method="post">
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">*型号</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="machine_type" placeholder="请输入手机型号：例如iPhone 6" name="name">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">*管理员</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="manager" placeholder="管理员" name="custodian">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">*操作系统</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="platform" placeholder="请输入操作系统平台：例如iOS" name="operation_system">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">*系统版本号</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="platform" placeholder="请输入操作系统版本号：例如11.1.2" name="operation_system_version">
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">颜色</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="platform" placeholder="请输入机器颜色：例如金" name="color">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-primary">添加</button>
+    </div>
+
+  </div>
+</form>
+{% endblock %}

@@ -4,5 +4,28 @@
 {% endblock %}
 
 {% block main %}
-    <h3 class="page-title"> 测试机管理页面首页  哈哈哈哈</h3>
+
+    <h3 class="page-title"> 测试机管理页面首页</h3>
+    <div style="text-align: right">
+        <a class="btn-primary" href="{{ url_for('add_machine') }}">添加测试机器</a>
+    </div>
+
+    {% for machine in machines %}
+        <li>
+            <div class="machine">
+                <span> {{ machine.name }} </span>
+                <span> {{ machine.custodian }} </span>
+                <span> {{ machine.lender }} </span>
+                <span> {{ machine.status }} </span>
+                <span> {{ machine.operation_system }} </span>
+                <span> {{ machine.operation_system_version }} </span>
+                <span> {{ machine.color }} </span>
+=            </div>
+        </li>
+    {% endfor %}
+
+
+
+
+
 {% endblock %}

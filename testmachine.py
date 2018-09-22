@@ -11,7 +11,8 @@ db.init_app(app)
 @app.route('/')
 def index():
     context = {
-        'machines': Machine.query.order_by('-create_time').all()
+        'machines': Machine.query.order_by('id').all(),
+        'user': User.query.all()
     }
     return render_template('index.html', **context)
 
@@ -68,15 +69,30 @@ def add_machine():
     else:
         name = request.form.get('name')
         user_id = session.get('user_id')
-        # current_user = User.query.filter(User.id == user_id).first()
-        # username = current_user.username
         custodian = request.form.get('custodian')
 
         operating_system = request.form.get('operation_system')
         operating_system_version = request.form.get('operation_system_version')
         color = request.form.get('color')
-
-        machine = Machine(status=0, name=name, operating_system=0, operating_system_version=operating_system_version, color=0)
+        #保存操作系统的变量
+        operating_system_r = 0
+        if "苹果" in operating_system:
+            operating_system_r = 0
+        elif "安卓" in operating_system:
+            operating_system_r = 1
+        else:
+            operating_system_r = 2
+        #保存手机的颜色
+        color_r = 0
+        if "白" in color:
+            color_r = 0
+        elif "黑" in color:
+            color_r = 1
+        elif "金" in color:
+            color_r = 2
+        else:
+            color_r = 3
+        machine = Machine(custodian_id=user_id, status=0, name=name, operating_system=operating_system_r, operating_system_version=operating_system_version, color=color_r)
         db.session.add(machine)
         db.session.commit()
         return redirect(url_for('index'))

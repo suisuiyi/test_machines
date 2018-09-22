@@ -7,25 +7,68 @@
 
     <h3 class="page-title"> 测试机管理页面首页</h3>
     <div style="text-align: right">
-        <a class="btn-primary" href="{{ url_for('add_machine') }}">添加测试机器</a>
+        <a class="btn btn-primary" href="{{ url_for('add_machine') }}">添加测试机器</a>
     </div>
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th>编号</th>
+                <th>设备型号</th>
+                <th>操作系统</th>
+                <th>操作系统版本号</th>
+                <th>颜色</th>
+                <th>管理员</th>
+                <th>借出人</th>
+                <th>借出时长</th>
+                <th>操作</th>
+            </tr>
+        </thead>
 
-    {% for machine in machines %}
-        <li>
-            <div class="machine">
-                <span> {{ machine.name }} </span>
-                <span> {{ machine.custodian }} </span>
-                <span> {{ machine.lender }} </span>
-                <span> {{ machine.status }} </span>
-                <span> {{ machine.operation_system }} </span>
-                <span> {{ machine.operation_system_version }} </span>
-                <span> {{ machine.color }} </span>
-=            </div>
-        </li>
-    {% endfor %}
+        <tbody>
+        {% for machine in machines %}
+            <tr class="machine">
+                <td>{{ machine.id }}</td>
+                <td>{{ machine.name }}</td>
+                {% if machine.operating_system == "0" %}
+                    <td>苹果</td>
+                {% elif machine.operating_system == "1" %}
+                    <td>安卓</td>
+                {% else %}
+                    <td>其他</td>
+                {% endif %}
+                <td>{{ machine.operating_system_version }}</td>
+                {% if machine.color == 0 %}
+                    <td>白色</td>
+                {% elif machine.color == 1 %}
+                    <td>黑色</td>
+                {% elif machine.color == 2 %}
+                    <td>金色</td>
+                {% else %}
+                    <td>其他颜色</td>
+                {% endif %}
+                <td>{{ machine.custodian.username }}</td>
+                {% if machine.lender == "--" %}
+                    <td>--</td>
+                {% else %}
+                    <td>{{ machine.lender }}</td>
+                <td>--</td>
+                {% endif %}
+                <td>--</td>
+
+                {% if machine.custodian.username == user.username %}
+                    <td>
+                    <button class="btn btn-primary" disabled = "disabled">借出</button>
+                    </td>
+                {% else %}
+                    <td>
+                    <button class="btn btn-primary" >借出</button>
+                    </td>
+                {% endif %}
 
 
-
-
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}

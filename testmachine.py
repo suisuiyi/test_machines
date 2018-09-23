@@ -12,7 +12,8 @@ db.init_app(app)
 def index():
     context = {
         'machines': Machine.query.order_by('id').all(),
-        'user': User.query.all()
+        'current_user': User.query.filter(User.id == session.get('user_id')).first()
+
     }
     return render_template('index.html', **context)
 

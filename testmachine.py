@@ -1,12 +1,15 @@
-#encoding: utf-8
+# encoding: utf-8
 from flask import Flask,render_template,request,redirect,url_for,session
 import config
 from exts import db
 from models import User
 from models import Machine
+from flask import jsonify
+import json
 app = Flask(__name__)
 app.config.from_object(config)
 db.init_app(app)
+
 
 @app.route('/')
 def index():
@@ -17,7 +20,8 @@ def index():
     }
     return render_template('index.html', **context)
 
-@app.route('/register/', methods=['GET','POST'])
+
+@app.route('/register/', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
         return render_template('register.html')
@@ -33,10 +37,11 @@ def register():
             if password1 != password2:
                 return '两次输入的密码不一致，请核对后再次输入'
             else:
-                registerUser = User(telephone=telephone, username=username,password=password1)
+                registerUser = User(telephone=telephone, username=username, password=password1)
                 db.session.add(registerUser)
                 db.session.commit()
                 return redirect(url_for('login'))
+
 
 @app.route('/login/', methods=['GET','POST'])
 def login():
@@ -52,6 +57,8 @@ def login():
             return redirect(url_for('index'))
         else:
             return '该用户不存在，请注册后登录'
+
+
 @app.route('/logout/')
 def logout():
     session.clear()
@@ -75,7 +82,7 @@ def add_machine():
         operating_system = request.form.get('operation_system')
         operating_system_version = request.form.get('operation_system_version')
         color = request.form.get('color')
-        #保存操作系统的变量
+        # 保存操作系统的变量
         operating_system_r = 0
         if "苹果" in operating_system:
             operating_system_r = 0
@@ -83,7 +90,7 @@ def add_machine():
             operating_system_r = 1
         else:
             operating_system_r = 2
-        #保存手机的颜色
+        # 保存手机的颜色
         color_r = 0
         if "白" in color:
             color_r = 0
@@ -98,7 +105,8 @@ def add_machine():
         db.session.commit()
         return redirect(url_for('index'))
 
-@app.route('/edit/machine/', methods=['GET','POST'])
+
+@app.route('/edit/machine/', methods=['GET', 'POST'])
 def edit_machine():
     if request.method == 'GET':
         return render_template('editMachine.html')
